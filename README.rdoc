@@ -6,15 +6,19 @@ Dindi help you create a spanking new sinatra app (modular only) with default dir
 
 == Usage
 
-To view dindi options
+To view dindi options:
 
     dindi -h
 
-Creating a new sinatra app called appname
+Creating a new sinatra app called appname:
 
     dindi -n appname
 
-Dont forget to run bundle install for the gems
+Compatibility mode with ruby 1.9.1:
+
+    dindi -n appname -r 1.9.1
+
+Dont forget to run bundle install for the gems:
 
     bundle install --path vendor/bundle
 

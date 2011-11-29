@@ -25,6 +25,11 @@ class OptionParser
         options.project_name = lib
       end
 
+      opts.on("-r", "--ruby RUBY_VERSION",
+              "Set RUBY_VERSION to 1.9.1 for compatibility mode") do |ver|
+        options.ruby_version = ver
+      end
+
       # No argument, shows at tail. This will print an options summary.
       # Try it and see!
       opts.on_tail("-h", "--help", "Show this message") do
@@ -55,6 +60,13 @@ if options.project_name.nil?
   exit
 end
 
+# make sure ruby version is valid
+if options.ruby_version.nil?
+  options.ruby_version = "1.9.2"
+else
+  options.ruby_version = "1.9.1"
+end
+
 project_absolute_dir = FileUtils.pwd + "/" + options.project_name
 
 # create default directories
@@ -63,79 +75,236 @@ project_absolute_dir = FileUtils.pwd + "/" + options.project_name
   FileUtils.mkdir_p(project_absolute_dir + "/" + dir)
 end
 
-#=================
-# create Gemfile
-#=================
-gemfile_contents = <<-gemfile
-source "http://rubygems.org"
-gem "sinatra"
-gem "mysql2"
-gem "haml"
-gem "activesupport"
-gem "activerecord"
-gem "json"
-gem "pony"
-gemfile
+if options.ruby_version == "1.9.2"
+  #=================
+  # create Gemfile
+  #=================
+  gemfile_contents = <<-gemfile
+  source "http://rubygems.org"
+  gem "sinatra"
+  gem "mysql2"
+  gem "haml"
+  gem "activesupport"
+  gem "activerecord"
+  gem "json"
+  gem "pony"
+  gemfile
 
-File.open("#{project_absolute_dir}/Gemfile", "w") do |file|
-  file.puts gemfile_contents
+  File.open("#{project_absolute_dir}/Gemfile", "w") do |file|
+    file.puts gemfile_contents
+  end
+
+  #=================
+  # create config.ru
+  #=================
+
+  config_ru_contents = <<-config_ru
+  $: << "."
+
+  # we use bundler
+  require 'bundler/setup'
+
+  # modular sinatra app
+  require 'sinatra/base'
+
+  # gems
+  %w(logger json haml csv digest date time active_support pony).each  {|lib| require lib}
+
+  # load db config and models
+  require 'models'
+
+  # extra library
+  Dir.glob("./extlibs/*.rb").each {|extlib| require extlib}
+
+  # helpers
+  #Dir.glob("./helpers/*.rb").each {|helper| require helper}
+
+  # controllers
+  Dir.glob("./routes/*.rb").each {|route| require route}
+
+  # app file
+  require '#{options.project_name}'
+
+  # app logger
+  $LOG = ::Logger.new("log/#{options.project_name}.log")
+
+  class Sinatra::Base
+    # set sinatra's variables
+    set     :environment, :production
+    enable  :sessions, :logging, :dump_errors, :show_exceptions
+    disable :run, :reload
+  end
+
+  # app routes
+  App = Rack::Builder.app do
+
+    run #{options.project_name.gsub(/(?:^|_)(.)/) { $1.upcase }}
+  end
+
+  # finally
+  run App
+
+  config_ru
+
+  File.open("#{project_absolute_dir}/config.ru", "w") do |file|
+    file.puts config_ru_contents
+  end
+  #====================
+  # create database.yml
+  #====================
+
+  database_yml_contents = <<-database_yml
+  login: &login
+    adapter: mysql2
+    username: root
+    password: password
+    host: localhost
+    timezone: SGT
+    reconnect: true
+
+  production:
+    <<: *login
+    database: #{options.project_name}
+    encoding: utf8
+  database_yml
+
+  File.open("#{project_absolute_dir}/database.yml", "w") do |file|
+    file.puts database_yml_contents
+  end
+
+  #=======================
+  # create models.rb
+  #=======================
+
+  models_rb_contents = <<-models_rb
+  require 'mysql2'
+  require 'active_record'
+
+  config = YAML.load_file('database.yml')
+  ActiveRecord::Base.establish_connection(config["production"])
+
+  Dir.glob("#{project_absolute_dir}/models/*.rb").each {|model| require model}
+  models_rb
+
+  File.open("#{project_absolute_dir}/models.rb", "w") do |file|
+    file.puts models_rb_contents
+  end
+
+else
+  #=================
+  # create Gemfile.191
+  #=================
+  gemfile191_contents = <<-gemfile191
+  source "http://rubygems.org"
+  gem "rack", "1.2.2"
+  gem "sinatra", "1.2.6"
+  gem "haml"
+  gem "activesupport", "=2.3.14"
+  gem "activerecord", "=2.3.14"
+  gem "json"
+  gem "pony"
+  gemfile191
+
+  File.open("#{project_absolute_dir}/Gemfile", "w") do |file|
+    file.puts gemfile191_contents
+  end
+  #=================
+  # create config.ru
+  #=================
+
+  config_ru_contents = <<-config_ru
+  $: << "."
+
+  # we use bundler
+  require 'bundler/setup'
+
+  # modular sinatra app
+  require 'sinatra/base'
+
+  # gems
+  %w(logger json haml csv digest date time activesupport pony).each  {|lib| require lib}
+
+  # load db config and models
+  require 'models'
+
+  # extra library
+  Dir.glob("./extlibs/*.rb").each {|extlib| require extlib}
+
+  # helpers
+  #Dir.glob("./helpers/*.rb").each {|helper| require helper}
+
+  # controllers
+  Dir.glob("./routes/*.rb").each {|route| require route}
+
+  # app file
+  require '#{options.project_name}'
+
+  # app logger
+  $LOG = ::Logger.new("log/#{options.project_name}.log")
+
+  class Sinatra::Base
+    # set sinatra's variables
+    set     :environment, :production
+    enable  :sessions, :logging, :dump_errors, :show_exceptions
+    disable :run, :reload
+  end
+
+  # app routes
+  App = Rack::Builder.app do
+
+    run #{options.project_name.gsub(/(?:^|_)(.)/) { $1.upcase }}
+  end
+
+  # finally
+  run App
+
+  config_ru
+
+  File.open("#{project_absolute_dir}/config.ru", "w") do |file|
+    file.puts config_ru_contents
+  end
+
+  #====================
+  # create database.yml
+  #====================
+
+  database_yml_contents = <<-database_yml
+  login: &login
+    adapter: mysql
+    username: root
+    password: password
+    host: localhost
+    timezone: SGT
+    reconnect: true
+
+  production:
+    <<: *login
+    database: #{options.project_name}
+    encoding: utf8
+  database_yml
+
+  File.open("#{project_absolute_dir}/database.yml", "w") do |file|
+    file.puts database_yml_contents
+  end
+
+  #=======================
+  # create models.rb
+  #=======================
+
+  models_rb_contents = <<-models_rb
+  require 'activerecord'
+
+  config = YAML.load_file('database.yml')
+  ActiveRecord::Base.establish_connection(config["production"])
+
+  Dir.glob("#{project_absolute_dir}/models/*.rb").each {|model| require model}
+  models_rb
+
+  File.open("#{project_absolute_dir}/models.rb", "w") do |file|
+    file.puts models_rb_contents
+  end
 end
 
-#=================
-# create config.ru
-#=================
-
-config_ru_contents = <<-config_ru
-$: << "."
-
-# we use bundler
-require 'bundler/setup'
-
-# modular sinatra app
-require 'sinatra/base'
-
-# gems
-%w(logger json haml csv digest date time active_support pony).each  {|lib| require lib}
-
-# load db config and models
-require 'models'
-
-# extra library
-Dir.glob("./extlibs/*.rb").each {|extlib| require extlib}
-
-# helpers
-#Dir.glob("./helpers/*.rb").each {|helper| require helper}
-
-# controllers
-Dir.glob("./routes/*.rb").each {|route| require route}
-
-# app file
-require '#{options.project_name}'
-
-# app logger
-$LOG = ::Logger.new("log/#{options.project_name}.log")
-
-class Sinatra::Base
-  # set sinatra's variables
-  set     :environment, :production
-  enable  :sessions, :logging, :dump_errors, :show_exceptions
-  disable :run, :reload
-end
-
-# app routes
-App = Rack::Builder.app do
-
-  run #{options.project_name.gsub(/(?:^|_)(.)/) { $1.upcase }}
-end
-
-# finally
-run App
-
-config_ru
-
-File.open("#{project_absolute_dir}/config.ru", "w") do |file|
-  file.puts config_ru_contents
-end
 
 #==================
 # create helpers.rb
@@ -164,46 +333,6 @@ File.open("#{project_absolute_dir}/helpers/debug_on.rb", "w") do |file|
   file.puts helpers_rb_contents
 end
 
-#====================
-# create database.yml
-#====================
-
-database_yml_contents = <<-database_yml
-login: &login
-  adapter: mysql2
-  username: root
-  password: password
-  host: localhost
-  timezone: SGT
-  reconnect: true
-
-production:
-  <<: *login
-  database: #{options.project_name}
-  encoding: utf8
-database_yml
-
-File.open("#{project_absolute_dir}/database.yml", "w") do |file|
-  file.puts database_yml_contents
-end
-
-#=======================
-# create models.rb
-#=======================
-
-models_rb_contents = <<-models_rb
-require 'mysql2'
-require 'active_record'
-
-config = YAML.load_file('database.yml')
-ActiveRecord::Base.establish_connection(config["production"])
-
-Dir.glob("#{project_absolute_dir}/models/*.rb").each {|model| require model}
-models_rb
-
-File.open("#{project_absolute_dir}/models.rb", "w") do |file|
-  file.puts models_rb_contents
-end
 
 #=======================
 # create project_name.rb
