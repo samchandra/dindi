@@ -1,6 +1,14 @@
 = dindi
 
-Description goes here.
+"Another hit by Sinatra"
+
+Dindi help you create a spanking new sinatra app (modular only) with default directory structures.
+
+== Usage
+
+`dindi -h` -- To view the command options
+
+`dindi -n appname` -- Will create a new sinatra app called appname
 
 == Contributing to dindi
  
