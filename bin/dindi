@@ -4,10 +4,6 @@
 require 'ostruct'
 require 'optparse'
 require 'fileutils'
-require 'active_support/core_ext/string/inflections'
-
-# extend ActiveSupport::CoreExtensions
-# include ActiveSupport::CoreExtensions::String::Inflections
 
 class OptionParser
 
@@ -129,7 +125,7 @@ end
 # app routes
 App = Rack::Builder.app do
 
-  run #{options.project_name.camelcase}
+  run #{options.project_name.gsub(/(?:^|_)(.)/) { $1.upcase }}
 end
 
 # finally
@@ -214,7 +210,7 @@ end
 #=======================
 
 project_name_rb_contents = <<-project_name_rb
-class #{options.project_name.camelcase} < Sinatra::Base
+class #{options.project_name.gsub(/(?:^|_)(.)/) { $1.upcase }} < Sinatra::Base
 
   # index
   get '/' do
