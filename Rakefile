@@ -6,7 +6,7 @@ begin
   Bundler.setup(:default, :development)
 rescue Bundler::BundlerError => e
   $stderr.puts e.message
-  $stderr.puts "Run `bundle install` to install missing gems"
+  $stderr.puts "Run `bundle install --path vendor/bundle` to install missing gems"
   exit e.status_code
 end
 require 'rake'
@@ -21,6 +21,7 @@ Jeweler::Tasks.new do |gem|
   gem.description = %Q{This gem will create a barebone base for a new Sinatra Project}
   gem.email = "samuelchandra@yahoo.com"
   gem.authors = ["Samuel Chandra"]
+  gem.executables = ["dindi"]
   # dependencies defined in Gemfile
 end
 Jeweler::RubygemsDotOrgTasks.new

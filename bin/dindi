@@ -4,6 +4,7 @@
 require 'ostruct'
 require 'optparse'
 require 'fileutils'
+require 'colorize'
 
 class OptionParser
 
@@ -14,12 +15,11 @@ class OptionParser
     options.project_name = nil
 
     opts = OptionParser.new do |opts|
-      opts.banner = "Usage: dindi.rb [options]"
+      opts.banner = "Usage: dindi [options]"
 
       opts.separator " "
       opts.separator "Specific options:"
 
-      # mandatory argument project directory
       opts.on("-n", "--name PROJECT_NAME",
               "Specify your project name PROJECT_NAME that will be created") do |lib|
         options.project_name = lib
@@ -34,20 +34,28 @@ class OptionParser
       # Try it and see!
       opts.on_tail("-h", "--help", "Show this message") do
         puts opts
-        exit
+        exit!
       end
 
     end
 
     opts.parse!(args)
     options
+
+  rescue Exception => e
+    if e.message.match(/invalid option/i) or e.message.match(/missing argument/i)
+      puts "ERROR: #{e.message}".red
+      puts ""
+      puts opts
+    end
+    exit 
   end
 
 end
 
 # make sure ARGV has values
 if ARGV.size == 0
-  puts "ERROR: Parameters needed.  Run with -h to view options"
+  puts "ERROR: Parameters needed.  Run with -h to view options".red
   exit
 end
 
@@ -80,14 +88,15 @@ if options.ruby_version == "1.9.2"
   # create Gemfile
   #=================
   gemfile_contents = <<-gemfile
-  source "http://rubygems.org"
-  gem "sinatra"
-  gem "mysql2"
-  gem "haml"
-  gem "activesupport"
-  gem "activerecord"
-  gem "json"
-  gem "pony"
+source "http://rubygems.org"
+gem "sinatra"
+gem "mysql2"
+gem "haml"
+gem "activesupport"
+gem "activerecord"
+gem "json"
+gem "pony"
+gem "compass"
   gemfile
 
   File.open("#{project_absolute_dir}/Gemfile", "w") do |file|
@@ -99,51 +108,59 @@ if options.ruby_version == "1.9.2"
   #=================
 
   config_ru_contents = <<-config_ru
-  $: << "."
+$: << "."
 
-  # we use bundler
-  require 'bundler/setup'
+# we use bundler
+require 'bundler/setup'
 
-  # modular sinatra app
-  require 'sinatra/base'
+# modular sinatra app
+require 'sinatra/base'
 
-  # gems
-  %w(logger json haml csv digest date time active_support pony).each  {|lib| require lib}
+# gems
+%w(logger json haml csv digest date time active_support pony).each  {|lib| require lib}
 
-  # load db config and models
-  require 'models'
+# load db config and models
+require 'models'
 
-  # extra library
-  Dir.glob("./extlibs/*.rb").each {|extlib| require extlib}
+# extra library
+Dir.glob("./extlibs/*.rb").each {|extlib| require extlib}
 
+# helpers
+Dir.glob("./helpers/*.rb").each {|helper| require helper}
+
+# controllers
+Dir.glob("./routes/*.rb").each {|route| require route}
+
+# app file
+require '#{options.project_name}'
+
+# custom app logger different from sintra logging
+$APP_LOG = ::Logger.new("log/#{options.project_name}.log")
+
+# app name
+$APP_NAME = "#{options.project_name.gsub(/(?:^|_)(.)/) { $1.upcase }}"
+
+class Sinatra::Base
   # helpers
-  #Dir.glob("./helpers/*.rb").each {|helper| require helper}
+  include DebugOn
+  
+  # set sinatra's variables
+  set     :root, File.dirname(__FILE__)
+  set     :environment, :production
+  enable  :sessions, :logging, :dump_errors, :show_exceptions
+  disable :run, :reload
+end
 
-  # controllers
-  Dir.glob("./routes/*.rb").each {|route| require route}
+# app routes
+App = Rack::Builder.app do
+  # routes
+  # use Cms
 
-  # app file
-  require '#{options.project_name}'
+  run #{options.project_name.gsub(/(?:^|_)(.)/) { $1.upcase }}
+end
 
-  # app logger
-  $LOG = ::Logger.new("log/#{options.project_name}.log")
-
-  class Sinatra::Base
-    # set sinatra's variables
-    set     :environment, :production
-    enable  :sessions, :logging, :dump_errors, :show_exceptions
-    disable :run, :reload
-  end
-
-  # app routes
-  App = Rack::Builder.app do
-
-    run #{options.project_name.gsub(/(?:^|_)(.)/) { $1.upcase }}
-  end
-
-  # finally
-  run App
-
+# finally
+run App
   config_ru
 
   File.open("#{project_absolute_dir}/config.ru", "w") do |file|
@@ -154,18 +171,18 @@ if options.ruby_version == "1.9.2"
   #====================
 
   database_yml_contents = <<-database_yml
-  login: &login
-    adapter: mysql2
-    username: root
-    password: password
-    host: localhost
-    timezone: SGT
-    reconnect: true
+login: &login
+  adapter: mysql2
+  username: root
+  password: password
+  host: localhost
+  timezone: SGT
+  reconnect: true
 
-  production:
-    <<: *login
-    database: #{options.project_name}
-    encoding: utf8
+production:
+  <<: *login
+  database: #{options.project_name}
+  encoding: utf8
   database_yml
 
   File.open("#{project_absolute_dir}/database.yml", "w") do |file|
@@ -177,13 +194,13 @@ if options.ruby_version == "1.9.2"
   #=======================
 
   models_rb_contents = <<-models_rb
-  require 'mysql2'
-  require 'active_record'
+require 'mysql2'
+require 'active_record'
 
-  config = YAML.load_file('database.yml')
-  ActiveRecord::Base.establish_connection(config["production"])
+config = YAML.load_file('database.yml')
+ActiveRecord::Base.establish_connection(config["production"])
 
-  Dir.glob("#{project_absolute_dir}/models/*.rb").each {|model| require model}
+Dir.glob("#{project_absolute_dir}/models/*.rb").each {|model| require model}
   models_rb
 
   File.open("#{project_absolute_dir}/models.rb", "w") do |file|
@@ -195,14 +212,15 @@ else
   # create Gemfile.191
   #=================
   gemfile191_contents = <<-gemfile191
-  source "http://rubygems.org"
-  gem "rack", "1.2.2"
-  gem "sinatra", "1.2.6"
-  gem "haml"
-  gem "activesupport", "=2.3.14"
-  gem "activerecord", "=2.3.14"
-  gem "json"
-  gem "pony"
+source "http://rubygems.org"
+gem "rack", "1.2.2"
+gem "sinatra", "1.2.6"
+gem "haml"
+gem "activesupport", "=2.3.14"
+gem "activerecord", "=2.3.14"
+gem "json"
+gem "pony"
+gem "compass"
   gemfile191
 
   File.open("#{project_absolute_dir}/Gemfile", "w") do |file|
@@ -213,51 +231,59 @@ else
   #=================
 
   config_ru_contents = <<-config_ru
-  $: << "."
+$: << "."
 
-  # we use bundler
-  require 'bundler/setup'
+# we use bundler
+require 'bundler/setup'
 
-  # modular sinatra app
-  require 'sinatra/base'
+# modular sinatra app
+require 'sinatra/base'
 
-  # gems
-  %w(logger json haml csv digest date time activesupport pony).each  {|lib| require lib}
+# gems
+%w(logger json haml csv digest date time activesupport pony).each  {|lib| require lib}
 
-  # load db config and models
-  require 'models'
+# load db config and models
+require 'models'
 
-  # extra library
-  Dir.glob("./extlibs/*.rb").each {|extlib| require extlib}
+# extra library
+Dir.glob("./extlibs/*.rb").each {|extlib| require extlib}
 
+# helpers
+Dir.glob("./helpers/*.rb").each {|helper| require helper}
+
+# controllers
+Dir.glob("./routes/*.rb").each {|route| require route}
+
+# app file
+require '#{options.project_name}'
+
+# custom app logger different from sinatra logging
+$APP_LOG = ::Logger.new("log/#{options.project_name}.log")
+
+# app name
+$APP_NAME = "#{options.project_name.gsub(/(?:^|_)(.)/) { $1.upcase }}"
+
+class Sinatra::Base
   # helpers
-  #Dir.glob("./helpers/*.rb").each {|helper| require helper}
+  include DebugOn
 
-  # controllers
-  Dir.glob("./routes/*.rb").each {|route| require route}
+  # set sinatra's variables
+  set     :root, File.dirname(__FILE__)
+  set     :environment, :production
+  enable  :sessions, :logging, :dump_errors, :show_exceptions
+  disable :run, :reload
+end
 
-  # app file
-  require '#{options.project_name}'
+# app routes
+App = Rack::Builder.app do
+  # routes
+  # use Cms
 
-  # app logger
-  $LOG = ::Logger.new("log/#{options.project_name}.log")
+  run #{options.project_name.gsub(/(?:^|_)(.)/) { $1.upcase }}
+end
 
-  class Sinatra::Base
-    # set sinatra's variables
-    set     :environment, :production
-    enable  :sessions, :logging, :dump_errors, :show_exceptions
-    disable :run, :reload
-  end
-
-  # app routes
-  App = Rack::Builder.app do
-
-    run #{options.project_name.gsub(/(?:^|_)(.)/) { $1.upcase }}
-  end
-
-  # finally
-  run App
-
+# finally
+run App
   config_ru
 
   File.open("#{project_absolute_dir}/config.ru", "w") do |file|
@@ -269,18 +295,18 @@ else
   #====================
 
   database_yml_contents = <<-database_yml
-  login: &login
-    adapter: mysql
-    username: root
-    password: password
-    host: localhost
-    timezone: SGT
-    reconnect: true
+login: &login
+  adapter: mysql
+  username: root
+  password: password
+  host: localhost
+  timezone: SGT
+  reconnect: true
 
-  production:
-    <<: *login
-    database: #{options.project_name}
-    encoding: utf8
+production:
+  <<: *login
+  database: #{options.project_name}
+  encoding: utf8
   database_yml
 
   File.open("#{project_absolute_dir}/database.yml", "w") do |file|
@@ -292,12 +318,12 @@ else
   #=======================
 
   models_rb_contents = <<-models_rb
-  require 'activerecord'
+require 'activerecord'
 
-  config = YAML.load_file('database.yml')
-  ActiveRecord::Base.establish_connection(config["production"])
+config = YAML.load_file('database.yml')
+ActiveRecord::Base.establish_connection(config["production"])
 
-  Dir.glob("#{project_absolute_dir}/models/*.rb").each {|model| require model}
+Dir.glob("#{project_absolute_dir}/models/*.rb").each {|model| require model}
   models_rb
 
   File.open("#{project_absolute_dir}/models.rb", "w") do |file|
@@ -311,19 +337,28 @@ end
 #==================
 
 helpers_rb_contents = <<-helpers_rb
-helpers do
+module DebugOn
 
   def debug_on
-    $LOG.info("===== START =====> #{Time.now.strftime("%d/%m/%Y %H:%M %p")}")
-    $LOG.info(request.url)
-    $LOG.info("Params:")
+    logger.info("===== START =====> #{Time.now.strftime("%d/%m/%Y %H:%M %p")}")
+    logger.info(request.url)
+    logger.info("Params:")
     params.each do |key, value|
-      $LOG.info("\#{key} => \#{value}")
+      logger.info("\#{key} => \#{value}")
+    end
+  end
+
+  def app_debug_on
+    $APP_LOG.info("===== START =====> #{Time.now.strftime("%d/%m/%Y %H:%M %p")}")
+    $APP_LOG.info(request.url)
+    $APP_LOG.info("Params:")
+    params.each do |key, value|
+      $APP_LOG.info("\#{key} => \#{value}")
     end
   end
   
-  def logger(text)
-    $LOG.info(text)
+  def app_logger(text)
+    $APP_LOG.info(text)
   end
   
 end
@@ -348,6 +383,7 @@ class #{options.project_name.gsub(/(?:^|_)(.)/) { $1.upcase }} < Sinatra::Base
 
   # docs
   get '/docs' do
+    @page_title = "Docs"
     haml :docs
   end
 
@@ -363,13 +399,20 @@ end
 #=======================
 
 docs_haml_contents = <<-docs_haml
-%h1 API Docs
-
-%p
-  %b{:style=>"color: red"}
-    http://servername
-  %br
-    (GET) Returns app name
+%table{:border => "0", :cellpadding => "0", :cellspacing => "0", :summary => "API Docs"}
+  %caption                                                   
+    %em API Docs                                 
+  %thead
+    %tr 
+      %th.span-4 URL                                                           
+      %th.span-4.last Description                                              
+  %tfoot
+    %tr
+      %td{:colspan => "2"} Change http://servername with the correct address
+  %tbody
+    %tr
+      %td http://servername                                               
+      %td (GET) Returns app name                                               
 docs_haml
 
 File.open("#{project_absolute_dir}/views/docs.haml", "w") do |file|
@@ -377,5 +420,12 @@ File.open("#{project_absolute_dir}/views/docs.haml", "w") do |file|
 end
 
 # Completion
-puts "Your project folder #{options.project_name} was successfully created"
-puts "Run 'bundle install --path vendor/bundle' to install required gems"
+puts "Your project folder #{options.project_name} was successfully created".green
+
+puts "Running 'bundle install --path vendor/bundle' ......."
+bundler_result = system("cd #{project_absolute_dir}; bundle install --path vendor/bundle")
+if bundler_result
+  puts "passed".green + " bundler install"
+else
+  puts "failed".red + " bundler install"
+end
