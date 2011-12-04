@@ -18,7 +18,7 @@ Jeweler::Tasks.new do |gem|
   gem.homepage = "http://github.com/schandra/dindi"
   gem.license = "MIT"
   gem.summary = %Q{Dindi is a hit of Sinatra}
-  gem.description = %Q{This gem will create a barebone base for a new Sinatra Project}
+  gem.description = %Q{This gem will create a modular base for a new Sinatra app}
   gem.email = "samuelchandra@yahoo.com"
   gem.authors = ["Samuel Chandra"]
   gem.executables = ["dindi"]

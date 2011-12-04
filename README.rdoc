@@ -10,13 +10,13 @@ To view dindi options:
 
     dindi -h
 
-Creating a new sinatra app called appname:
+Creating a new Sinatra app called appname:
 
     dindi -n appname
 
 OR
 
-Creating a new sinatra app for ruby 1.9.1:
+Creating a new Sinatra app for ruby 1.9.1:
 
     dindi -n appname -r 1.9.1
 
