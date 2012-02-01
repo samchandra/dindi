@@ -96,6 +96,7 @@ gem "activesupport"
 gem "activerecord"
 gem "json"
 gem "pony"
+gem "thin"
   gemfile
 
   File.open("#{project_absolute_dir}/Gemfile", "w") do |file|
@@ -216,6 +217,7 @@ gem "activesupport", "=2.3.14"
 gem "activerecord", "=2.3.14"
 gem "json"
 gem "pony"
+gem "thin"
   gemfile191
 
   File.open("#{project_absolute_dir}/Gemfile", "w") do |file|
