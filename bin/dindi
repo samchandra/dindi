@@ -96,7 +96,6 @@ gem "activesupport"
 gem "activerecord"
 gem "json"
 gem "pony"
-gem "compass"
   gemfile
 
   File.open("#{project_absolute_dir}/Gemfile", "w") do |file|
@@ -171,16 +170,13 @@ run App
   #====================
 
   database_yml_contents = <<-database_yml
-login: &login
+production:
   adapter: mysql2
   username: root
   password: password
   host: localhost
   timezone: SGT
   reconnect: true
-
-production:
-  <<: *login
   database: #{options.project_name}
   encoding: utf8
   database_yml
@@ -220,7 +216,6 @@ gem "activesupport", "=2.3.14"
 gem "activerecord", "=2.3.14"
 gem "json"
 gem "pony"
-gem "compass"
   gemfile191
 
   File.open("#{project_absolute_dir}/Gemfile", "w") do |file|
