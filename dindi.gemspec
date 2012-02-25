@@ -5,7 +5,7 @@
 
 Gem::Specification.new do |s|
   s.name = "dindi"
-  s.version = "0.4.10"
+  s.version = "0.5.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Samuel Chandra"]
@@ -28,10 +28,10 @@ Gem::Specification.new do |s|
     "lib/dindi.rb",
     "lib/dindi/command_parser.rb",
     "lib/dindi/file_helper.rb",
-    "lib/dindi/file_templates/1.9.1/Gemfile",
-    "lib/dindi/file_templates/1.9.1/config.ru",
-    "lib/dindi/file_templates/1.9.1/database.yml",
-    "lib/dindi/file_templates/1.9.1/models.rb",
+    "lib/dindi/file_templates/1.9.1/Gemfile.erb",
+    "lib/dindi/file_templates/1.9.1/config.ru.erb",
+    "lib/dindi/file_templates/1.9.1/database.yml.erb",
+    "lib/dindi/file_templates/1.9.1/models.rb.erb",
     "lib/dindi/file_templates/1.9.2/Gemfile.erb",
     "lib/dindi/file_templates/1.9.2/config.ru.erb",
     "lib/dindi/file_templates/1.9.2/database.yml.erb",
