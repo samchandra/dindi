@@ -15,7 +15,7 @@ require 'jeweler'
 Jeweler::Tasks.new do |gem|
   # gem is a Gem::Specification... see http://docs.rubygems.org/read/chapter/20 for more options
   gem.name = "dindi"
-  gem.homepage = "http://github.com/schandra/dindi"
+  gem.homepage = "http://github.com/samchandra/dindi"
   gem.license = "MIT"
   gem.summary = %Q{Dindi is a hit of Sinatra}
   gem.description = %Q{This gem will create a modular base for a new Sinatra app}

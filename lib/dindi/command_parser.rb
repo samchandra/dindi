@@ -32,7 +32,8 @@ module Dindi
         # Try it and see!
         opts.on_tail("-h", "--help", "Show this message") do
           puts opts
-          # exit!
+          puts ""
+          raise
         end
 
       end
@@ -57,8 +58,9 @@ module Dindi
         puts "ERROR: #{e.message}".red
         puts ""
         puts opts
+        puts ""
       end
-      # exit 
+      raise
     end
 
   end

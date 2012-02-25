@@ -8,16 +8,22 @@ require 'dindi'
 # validate ARGV
 if ARGV.size == 0
   puts "ERROR: Parameters needed.  Run with -h to view options".red
+  puts ""
   exit
 end
 
 # parse ARGV
 options = OpenStruct.new
-Dindi::CommandParser.parse(ARGV, options)
+begin
+  Dindi::CommandParser.parse(ARGV, options)
+rescue Exception => e
+  exit!
+end
 
 # make sure project name is valid
 if options.project_name.nil? or options.project_absolute_dir.nil?
-  puts "ERROR: PROJECT_NAME is needed. Run with -h to view options"
+  puts "ERROR: PROJECT_NAME is needed. Run with -h to view options".red
+  puts ""
   exit
 end
 
