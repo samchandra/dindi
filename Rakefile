@@ -21,6 +21,7 @@ Jeweler::Tasks.new do |gem|
   gem.description = %Q{This gem will create a modular base for a new Sinatra app}
   gem.email = "samuelchandra@yahoo.com"
   gem.authors = ["Samuel Chandra"]
+  gem.files = FileList['lib/**/*', 'bin/*', '[A-Z]*', 'test/**/*'].to_a
   gem.executables = ["dindi"]
   # dependencies defined in Gemfile
 end

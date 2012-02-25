@@ -1,0 +1,6 @@
+require 'activerecord'
+
+config = YAML.load_file('database.yml')
+ActiveRecord::Base.establish_connection(config["production"])
+
+Dir.glob("<%= project_absolute_dir %>/models/*.rb").each {|model| require model}

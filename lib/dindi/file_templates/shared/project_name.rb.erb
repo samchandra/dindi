@@ -1,0 +1,14 @@
+class <%= options.project_name.gsub(/(?:^|_)(.)/) { $1.upcase } %> < Sinatra::Base
+
+  # index
+  get '/' do
+    '<%= options.project_name %>'
+  end
+
+  # docs
+  get '/docs' do
+    @page_title = "Docs"
+    haml :docs
+  end
+
+end

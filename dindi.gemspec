@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = "dindi"
-  s.version = "0.4.0"
+  s.version = "0.4.10"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Samuel Chandra"]
-  s.date = "2012-02-01"
+  s.date = "2012-02-25"
   s.description = "This gem will create a modular base for a new Sinatra app"
   s.email = "samuelchandra@yahoo.com"
   s.executables = ["dindi"]
@@ -18,7 +18,6 @@ Gem::Specification.new do |s|
     "README.rdoc"
   ]
   s.files = [
-    ".document",
     "Gemfile",
     "Gemfile.lock",
     "LICENSE.txt",
@@ -26,15 +25,27 @@ Gem::Specification.new do |s|
     "Rakefile",
     "VERSION",
     "bin/dindi",
-    "dindi.gemspec",
     "lib/dindi.rb",
+    "lib/dindi/command_parser.rb",
+    "lib/dindi/file_helper.rb",
+    "lib/dindi/file_templates/1.9.1/Gemfile",
+    "lib/dindi/file_templates/1.9.1/config.ru",
+    "lib/dindi/file_templates/1.9.1/database.yml",
+    "lib/dindi/file_templates/1.9.1/models.rb",
+    "lib/dindi/file_templates/1.9.2/Gemfile.erb",
+    "lib/dindi/file_templates/1.9.2/config.ru.erb",
+    "lib/dindi/file_templates/1.9.2/database.yml.erb",
+    "lib/dindi/file_templates/1.9.2/models.rb.erb",
+    "lib/dindi/file_templates/shared/docs.haml.erb",
+    "lib/dindi/file_templates/shared/helpers.rb.erb",
+    "lib/dindi/file_templates/shared/project_name.rb.erb",
     "test/helper.rb",
     "test/test_dindi.rb"
   ]
   s.homepage = "http://github.com/schandra/dindi"
   s.licenses = ["MIT"]
   s.require_paths = ["lib"]
-  s.rubygems_version = "1.8.15"
+  s.rubygems_version = "1.8.10"
   s.summary = "Dindi is a hit of Sinatra"
 
   if s.respond_to? :specification_version then

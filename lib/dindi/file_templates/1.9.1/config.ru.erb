@@ -1,0 +1,53 @@
+$: << "."
+
+# we use bundler
+require 'bundler/setup'
+
+# modular sinatra app
+require 'sinatra/base'
+
+# gems
+%w(logger json haml csv digest date time activesupport pony).each  {|lib| require lib}
+
+# load db config and models
+require 'models'
+
+# extra library
+Dir.glob("./extlibs/*.rb").each {|extlib| require extlib}
+
+# helpers
+Dir.glob("./helpers/*.rb").each {|helper| require helper}
+
+# controllers
+Dir.glob("./routes/*.rb").each {|route| require route}
+
+# app file
+require '<%= options.project_name %>'
+
+# custom app logger different from sinatra logging
+$APP_LOG = ::Logger.new("log/<%= options.project_name %>.log")
+
+# app name
+$APP_NAME = "<%= options.project_name.gsub(/(?:^|_)(.)/) { $1.upcase } %>"
+
+class Sinatra::Base
+  # helpers
+  include DebugOn
+
+  # set sinatra's variables
+  set     :root, File.dirname(__FILE__)
+  set     :environment, :production
+  enable  :sessions, :logging, :dump_errors, :show_exceptions
+  disable :run, :reload
+end
+
+# app routes
+App = Rack::Builder.app do
+  # routes
+  # use Cms
+
+  run <%= options.project_name.gsub(/(?:^|_)(.)/) { $1.upcase } %>
+end
+
+# finally
+run App
