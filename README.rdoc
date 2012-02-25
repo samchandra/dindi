@@ -7,7 +7,6 @@ Dindi help you create a spanking new sinatra app (modular only) with default dir
 == Usage
 
   gem install dindi
-
   dindi -n newapp
 
 == Help
@@ -18,13 +17,13 @@ To view all options
 
 == Example
 
-To create a new Sinatra app called `convore`
+To create a new Sinatra app called 'convore'
 
     dindi -n convore
 
-To create a new Sinatra app called `convore` for Ruby 1.9.1
+To create a new Sinatra app called 'convore' for Ruby 1.9.1
 
-    dindi -n appname -r 1.9.1
+    dindi -n convore -r 1.9.1
 
 == Contributing to dindi
  
