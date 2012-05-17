@@ -7,8 +7,9 @@ class <%= options.project_name.gsub(/(?:^|_)(.)/) { $1.upcase } %> < Sinatra::Ba
 
   # docs
   get '/docs' do
+    protected!
     @page_title = "Docs"
-    haml :docs
+    haml :docs, :layout => false
   end
 
 end

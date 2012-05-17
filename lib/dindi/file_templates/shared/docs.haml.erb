@@ -1,14 +1,33 @@
-%table{:border => "0", :cellpadding => "0", :cellspacing => "0", :summary => "API Docs"}
-  %caption                                                   
-    %em API Docs                                 
-  %thead
-    %tr 
-      %th.span-4 URL                                                           
-      %th.span-4.last Description                                              
-  %tfoot
-    %tr
-      %td{:colspan => "2"} Change http://servername with the correct address
-  %tbody
-    %tr
-      %td http://servername                                               
-      %td (GET) Returns app name                                               
+%html
+  %head
+    %title= if @page_title then "CMS " + @page_title.humanize else "CMS" end 
+    %meta{:content => "text/html; charset=utf-8", "http-equiv" => "Content-Type"}
+    %meta{:content => "NONE,NOARCHIVE", :name => "robots"}
+    %link{:href => "http://twitter.github.com/bootstrap/assets/css/bootstrap.css", :rel => "stylesheet", :type => "text/css"}
+    :css
+      body {
+        padding-top: 20px;
+        padding-bottom: 40px;
+      }   
+
+  %body
+    .container-fluid
+      .row-fluid
+        .span12
+          %h3 
+            API Docs
+
+          %table.table.table-striped
+            %thead
+              %tr 
+                %th{:width => "30%"} URL                                                                                             
+                %th{:width => "70%"} Description                                                                                
+            %tfoot
+              %tr 
+                %td{:colspan => "2"} Copyright &copy;2012
+            %tbody
+              %tr 
+                %td 
+                  %a{:href => "http://servername.com"}
+                    http://servername                                    
+                %td (GET) Returns app cms 
