@@ -1,0 +1,9 @@
+pkg
+*.swp
+.swo
+*~
+tags
+rdoc
+*.gem
+Gemfile.lock
+.bundle

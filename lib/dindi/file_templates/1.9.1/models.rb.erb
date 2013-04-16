@@ -1,6 +1,8 @@
+require 'mysql2'
 require 'activerecord'
 
 config = YAML.load_file('database.yml')
 ActiveRecord::Base.establish_connection(config["production"])
+ActiveRecord::Base.include_root_in_json = false
 
 Dir.glob("<%= project_absolute_dir %>/models/*.rb").each {|model| require model}

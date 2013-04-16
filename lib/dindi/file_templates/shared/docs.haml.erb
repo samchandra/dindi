@@ -3,7 +3,7 @@
     %title= if @page_title then "CMS " + @page_title.humanize else "CMS" end 
     %meta{:content => "text/html; charset=utf-8", "http-equiv" => "Content-Type"}
     %meta{:content => "NONE,NOARCHIVE", :name => "robots"}
-    %link{:href => "http://twitter.github.com/bootstrap/assets/css/bootstrap.css", :rel => "stylesheet", :type => "text/css"}
+    %link{:href => "http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap-combined.min.css", :rel => "stylesheet", :type => "text/css"}
     :css
       body {
         padding-top: 20px;
@@ -20,14 +20,16 @@
           %table.table.table-striped
             %thead
               %tr 
-                %th{:width => "30%"} URL                                                                                             
-                %th{:width => "70%"} Description                                                                                
+                %th{:width => "10%"} Method
+                %th{:width => "45%"} URL                                                                                             
+                %th{:width => "45%"} Description                                                                                
             %tfoot
               %tr 
-                %td{:colspan => "2"} Copyright &copy;2012
+                %td{:colspan => "3"} Copyright &copy;2013
             %tbody
               %tr 
+                %td GET
                 %td 
                   %a{:href => "http://servername.com"}
                     http://servername                                    
-                %td (GET) Returns app cms 
+                %td Returns app cms 

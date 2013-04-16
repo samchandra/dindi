@@ -5,7 +5,7 @@ module DebugOn
     logger.info(request.url)
     logger.info("Params:")
     params.each do |key, value|
-      logger.info("\#{key} => \#{value}")
+      logger.info("#{key} => #{value}")
     end
   end
 
@@ -14,7 +14,7 @@ module DebugOn
     $APP_LOG.info(request.url)
     $APP_LOG.info("Params:")
     params.each do |key, value|
-      $APP_LOG.info("\#{key} => \#{value}")
+      $APP_LOG.info("#{key} => #{value}")
     end
   end
   

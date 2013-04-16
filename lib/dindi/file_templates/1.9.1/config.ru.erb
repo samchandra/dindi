@@ -35,7 +35,7 @@ class Sinatra::Base
   include DebugOn
 
   # set sinatra's variables
-  set     :root, File.dirname(__FILE__)
+  set     :root, ::File.dirname(__FILE__)
   set     :environment, :production
   enable  :sessions, :logging, :dump_errors, :show_exceptions
   disable :run, :reload
