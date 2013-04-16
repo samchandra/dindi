@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = "dindi"
-  s.version = "0.5.3"
+  s.version = "0.6.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Samuel Chandra"]
-  s.date = "2012-06-21"
+  s.date = "2013-04-16"
   s.description = "This gem will create a modular base for a new Sinatra app"
   s.email = "samuelchandra@yahoo.com"
   s.executables = ["dindi"]
@@ -45,7 +45,7 @@ Gem::Specification.new do |s|
   s.homepage = "http://github.com/samchandra/dindi"
   s.licenses = ["MIT"]
   s.require_paths = ["lib"]
-  s.rubygems_version = "1.8.10"
+  s.rubygems_version = "1.8.23"
   s.summary = "Dindi is a hit of Sinatra"
 
   if s.respond_to? :specification_version then
