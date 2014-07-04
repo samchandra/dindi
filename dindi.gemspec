@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = "dindi"
-  s.version = "0.6.0"
+  s.version = "0.7.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Samuel Chandra"]
-  s.date = "2013-04-16"
+  s.date = "2014-07-04"
   s.description = "This gem will create a modular base for a new Sinatra app"
   s.email = "samuelchandra@yahoo.com"
   s.executables = ["dindi"]
@@ -28,16 +28,13 @@ Gem::Specification.new do |s|
     "lib/dindi.rb",
     "lib/dindi/command_parser.rb",
     "lib/dindi/file_helper.rb",
-    "lib/dindi/file_templates/1.9.1/Gemfile.erb",
-    "lib/dindi/file_templates/1.9.1/config.ru.erb",
-    "lib/dindi/file_templates/1.9.1/database.yml.erb",
-    "lib/dindi/file_templates/1.9.1/models.rb.erb",
-    "lib/dindi/file_templates/1.9.2/Gemfile.erb",
-    "lib/dindi/file_templates/1.9.2/config.ru.erb",
-    "lib/dindi/file_templates/1.9.2/database.yml.erb",
-    "lib/dindi/file_templates/1.9.2/models.rb.erb",
+    "lib/dindi/file_templates/latest/Gemfile.erb",
+    "lib/dindi/file_templates/latest/config.ru.erb",
+    "lib/dindi/file_templates/latest/database.yml.erb",
+    "lib/dindi/file_templates/latest/models.rb.erb",
+    "lib/dindi/file_templates/shared/debug_on.rb.erb",
+    "lib/dindi/file_templates/shared/deploy_setting.rb.erb",
     "lib/dindi/file_templates/shared/docs.haml.erb",
-    "lib/dindi/file_templates/shared/helpers.rb.erb",
     "lib/dindi/file_templates/shared/project_name.rb.erb",
     "test/helper.rb",
     "test/test_dindi.rb"
@@ -45,34 +42,28 @@ Gem::Specification.new do |s|
   s.homepage = "http://github.com/samchandra/dindi"
   s.licenses = ["MIT"]
   s.require_paths = ["lib"]
-  s.rubygems_version = "1.8.23"
-  s.summary = "Dindi is a hit of Sinatra"
+  s.rubygems_version = "2.0.3"
+  s.summary = "Dindi is a hit from Sinatra"
 
   if s.respond_to? :specification_version then
-    s.specification_version = 3
+    s.specification_version = 4
 
     if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
       s.add_runtime_dependency(%q<colorize>, [">= 0"])
-      s.add_runtime_dependency(%q<bundler>, [">= 1.0.0"])
-      s.add_development_dependency(%q<shoulda>, [">= 0"])
-      s.add_development_dependency(%q<bundler>, [">= 1.0.0"])
-      s.add_development_dependency(%q<jeweler>, ["~> 1.6.4"])
-      s.add_development_dependency(%q<simplecov>, [">= 0"])
+      s.add_runtime_dependency(%q<bundler>, [">= 0"])
+      s.add_development_dependency(%q<bundler>, [">= 0"])
+      s.add_development_dependency(%q<jeweler>, [">= 0"])
     else
       s.add_dependency(%q<colorize>, [">= 0"])
-      s.add_dependency(%q<bundler>, [">= 1.0.0"])
-      s.add_dependency(%q<shoulda>, [">= 0"])
-      s.add_dependency(%q<bundler>, [">= 1.0.0"])
-      s.add_dependency(%q<jeweler>, ["~> 1.6.4"])
-      s.add_dependency(%q<simplecov>, [">= 0"])
+      s.add_dependency(%q<bundler>, [">= 0"])
+      s.add_dependency(%q<bundler>, [">= 0"])
+      s.add_dependency(%q<jeweler>, [">= 0"])
     end
   else
     s.add_dependency(%q<colorize>, [">= 0"])
-    s.add_dependency(%q<bundler>, [">= 1.0.0"])
-    s.add_dependency(%q<shoulda>, [">= 0"])
-    s.add_dependency(%q<bundler>, [">= 1.0.0"])
-    s.add_dependency(%q<jeweler>, ["~> 1.6.4"])
-    s.add_dependency(%q<simplecov>, [">= 0"])
+    s.add_dependency(%q<bundler>, [">= 0"])
+    s.add_dependency(%q<bundler>, [">= 0"])
+    s.add_dependency(%q<jeweler>, [">= 0"])
   end
 end
 
