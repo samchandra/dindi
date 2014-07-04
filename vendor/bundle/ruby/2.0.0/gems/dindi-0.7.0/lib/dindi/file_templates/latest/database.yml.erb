@@ -1,0 +1,19 @@
+production:
+  adapter:  mysql2
+  username: root
+  password: password
+  host:     localhost
+  timezone: SGT
+  reconnect: true
+  database: <%= options.project_name %>
+  encoding: utf8
+
+development:
+  adapter:  mysql2
+  username: root
+  password: password
+  host:     localhost
+  timezone: SGT
+  reconnect: true
+  database: <%= options.project_name %>_dev
+  encoding: utf8

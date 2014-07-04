@@ -1,0 +1,18 @@
+class <%= options.project_name.gsub(/(?:^|_)(.)/) { $1.upcase } %> < Sinatra::Base
+
+  # Routes
+  # use Cms
+
+  # index
+  get '/' do
+    '<%= options.project_name %>'
+  end
+
+  # docs
+  get '/docs' do
+    protected!
+    @page_title = "Docs"
+    haml :docs, :layout => false
+  end
+
+end

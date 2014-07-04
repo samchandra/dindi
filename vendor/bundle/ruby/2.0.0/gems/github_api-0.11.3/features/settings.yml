@@ -1,0 +1,7 @@
+---
+oauth_token: 4b1de666ad20cc8ed75a96177db7f2e8530ecc2a
+basic_auth: murek:Testing123
+user: murek
+repo: github_api_test
+org: organisation this user belongs to
+email: username@example.com
