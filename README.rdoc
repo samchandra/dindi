@@ -21,10 +21,6 @@ To create a new Sinatra app called 'convore'
 
     dindi -n convore
 
-To create a new Sinatra app called 'convore' for Ruby 1.9.1
-
-    dindi -n convore -r 1.9.1
-
 == Contributing to dindi
  
 * Check out the latest master to make sure the feature hasn't been implemented or the bug hasn't been fixed yet
@@ -37,6 +33,6 @@ To create a new Sinatra app called 'convore' for Ruby 1.9.1
 
 == Copyright
 
-Copyright (c) 2011 Samuel Chandra. See LICENSE.txt for
+Copyright (c) 2015 Samuel Chandra. See LICENSE.txt for
 further details.
 
