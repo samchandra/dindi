@@ -3,7 +3,7 @@
     %title Docs
     %meta{:content => "text/html; charset=utf-8", "http-equiv" => "Content-Type"}
     %meta{:content => "NONE,NOARCHIVE", :name => "robots"}
-    %link{:href => "http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap-combined.min.css", :rel => "stylesheet", :type => "text/css"}
+    %link{:href=>"//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css", :rel=>"stylesheet"}
     :css
       body {
         padding-top: 20px;
@@ -12,24 +12,23 @@
 
   %body
     .container-fluid
-      .row-fluid
-        .span12
-          %h3 
-            API Docs
-
-          %table.table.table-striped
-            %thead
-              %tr 
-                %th{:width => "10%"} Method
-                %th{:width => "45%"} URL                                                                                             
-                %th{:width => "45%"} Description                                                                                
-            %tfoot
-              %tr 
-                %td{:colspan => "3"} Copyright &copy;2014
-            %tbody
-              %tr 
-                %td GET
-                %td 
-                  %a{:href => "http://servername.com"}
-                    http://servername                                    
-                %td Returns app cms 
+      .row
+        .h3 
+          API Docs
+      .row
+        %table.table.table-striped
+          %thead
+            %tr 
+              %th{:width => "10%"} Method
+              %th{:width => "45%"} URL                                                                                             
+              %th{:width => "45%"} Description                                                                                
+          %tfoot
+            %tr 
+              %td{:colspan => "3"} Copyright &copy;2015
+          %tbody
+            %tr 
+              %td GET
+              %td 
+                %a{:href => "/"}
+                  http://localhost
+              %td Load app home page

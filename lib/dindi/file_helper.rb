@@ -7,7 +7,7 @@ module Dindi
 
     def self.create_default_directories(options)
       project_absolute_dir = options.project_absolute_dir
-      %w(tmp log public push views routes extlibs models helpers tests scripts).each do |dir|
+      %w(tmp log public push configs views routes extlibs models helpers tests scripts).each do |dir|
         FileUtils.mkdir_p(File.join(project_absolute_dir, dir))
       end
     end
@@ -46,7 +46,7 @@ module Dindi
 
       # copy location for not common template files
       special_location_hash = {"debug_on.rb"        => File.join(project_absolute_dir, 'helpers', 'debug_on.rb'),
-                               "deploy_setting.rb"  => File.join(project_absolute_dir, 'helpers', 'deploy_setting.rb'),
+                               "deploy_setting.rb"  => File.join(project_absolute_dir, 'configs', 'deploy_setting.rb'),
                                "docs.haml"          => File.join(project_absolute_dir, 'views', 'docs.haml'), 
                                "project_name.rb"    => File.join(project_absolute_dir, "#{options.project_name}.rb")
                               }
