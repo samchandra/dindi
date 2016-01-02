@@ -1,0 +1,7 @@
+class MainController < Sinatra::Base
+
+  get '/' do
+    '<h1><%= options.project_name %></h1>'
+  end
+
+end

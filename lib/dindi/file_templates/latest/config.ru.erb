@@ -24,9 +24,6 @@ Dir.glob("./extlibs/*.rb").each {|extlib| require extlib}
 # controllers
 Dir.glob("./routes/*.rb").each {|route| require route}
 
-# app file
-require '<%= options.project_name %>'
-
 class Sinatra::Base
   # helpers
   include DebugOn
@@ -49,4 +46,17 @@ class Sinatra::Base
 
 end
 
-run <%= options.project_name.gsub(/(?:^|_)(.)/) { $1.upcase } %>
+# App Router
+app = Rack::Builder.new do
+
+  map("/")     {run MainController.new }
+  map("/docs") {run DocsController.new }
+
+  # CMS
+  # map "/cms" do
+  #   map("/")   {run CmsController.new }
+  # end
+  
+end
+
+run app
