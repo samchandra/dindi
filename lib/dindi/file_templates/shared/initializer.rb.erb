@@ -14,8 +14,8 @@ require 'mysql2'
 require 'active_record'
 
 # configs
-require 'deploy_setting'
-require 'active_record_setting'
+require_relative 'deploy_setting'
+require_relative 'active_record_setting'
 
 $root_path = File.join(File.dirname(__FILE__), '..')
 
@@ -32,7 +32,7 @@ class Sinatra::Base
 
   # set sinatra's variables
   set :app_name, "<%= options.project_name.gsub(/(?:^|_)(.)/) { $1.upcase } %>" 
-  set :app_logger, Logger.new(File.join(File.dirname(__FILE__), 'log', "<%= options.project_name %>.log"), 'daily')
+  set :app_logger, Logger.new(File.join($root_path, 'log', "<%= options.project_name %>.log"), 'daily')
   set :root, $root_path
   set :environment, DeploySetting.environment
 
