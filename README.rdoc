@@ -17,9 +17,9 @@ To view all options
 
 == Example
 
-To create a new Sinatra app called 'convore'
+To create a new Sinatra app called 'lelong'
 
-    dindi -n convore
+    dindi -n lelong
 
 == Contributing to dindi
  
