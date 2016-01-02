@@ -36,10 +36,13 @@ Dindi::FileHelper.copy_file_templates(options)
 # Completion
 puts "Your project folder #{options.project_name} was successfully created".green
 
-puts "Running 'bundle install --path vendor/bundle' ......."
-bundler_result = system("cd #{options.project_absolute_dir}; bundle install --path vendor/bundle")
-if bundler_result
-  puts "passed".green + " bundler install"
-else
-  puts "failed".red + " bundler install"
+# Optional steps
+if options.with_bundle_install
+  puts "Running 'bundle install --path vendor/bundle' ......."
+  bundler_result = system("cd #{options.project_absolute_dir}; bundle install --path vendor/bundle")
+  if bundler_result
+    puts "passed".green + " bundler install"
+  else
+    puts "failed".red + " bundler install"
+  end
 end

@@ -13,6 +13,7 @@ module Dindi
       #
       # We set the default value here
       options.project_name = nil
+      options.with_bundle_install = false
 
       opts = OptionParser.new do |opts|
         opts.banner = "Usage: dindi [options]"
@@ -21,8 +22,12 @@ module Dindi
         opts.separator "Specific options:"
 
         opts.on("-n", "--name PROJECT_NAME",
-                "Specify your project name PROJECT_NAME that will be created") do |lib|
-          options.project_name = lib.downcase
+                "Specify your project name PROJECT_NAME that will be created") do |project_name|
+          options.project_name = project_name.downcase
+        end
+
+        opts.on("-b", "--[no-]bundle-install", "Run bundler install after project creation") do |b|
+          options.with_bundle_install = b
         end
 
         # No argument, shows at tail. This will print an options summary.
