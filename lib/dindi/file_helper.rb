@@ -48,8 +48,8 @@ module Dindi
       special_location_hash = {"debug_on.rb"        => File.join(project_absolute_dir, 'helpers', 'debug_on.rb'),
                                "deploy_setting.rb"  => File.join(project_absolute_dir, 'configs', 'deploy_setting.rb'),
                                "docs.haml"          => File.join(project_absolute_dir, 'views', 'docs.haml'), 
-                               "docs_controller.rb" => File.join(project_absolute_dir, 'controllers', 'docs_controller.rb'), 
-                               "main_controller.rb" => File.join(project_absolute_dir, 'controllers', 'main_controller.rb')
+                               "docs_controller.rb" => File.join(project_absolute_dir, 'routes', 'docs_controller.rb'), 
+                               "main_controller.rb" => File.join(project_absolute_dir, 'routes', 'main_controller.rb')
                               }
 
       if special_location_hash[filename]
