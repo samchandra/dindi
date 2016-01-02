@@ -1,61 +1,16 @@
-$: << "."
-
-# we use bundler
-require 'bundler/setup'
-
-# modular sinatra app
-require 'sinatra/base'
-
-# gems
-%w(logger json haml digest date time yaml).each {|gem| require gem}
-
-# load app config
-Dir.glob("./configs/*.rb").each {|config| require config}
-
-# load db config and models
-require 'models'
-
-# helpers
-Dir.glob("./helpers/*.rb").each {|helper| require helper}
-
-# external library
-Dir.glob("./extlibs/*.rb").each {|extlib| require extlib}
-
-# controllers
-Dir.glob("./routes/*.rb").each {|route| require route}
-
-class Sinatra::Base
-  # helpers
-  include DebugOn
-
-  # set sinatra's variables
-  set :app_name, "<%= options.project_name.gsub(/(?:^|_)(.)/) { $1.upcase } %>" 
-  set :app_logger, ::Logger.new(File.join(File.dirname(__FILE__), 'log', "<%= options.project_name %>.log"))
-  set :root, File.dirname(__FILE__)
-  set :environment, DeploySetting.environment
-
-  if settings.environment == :production
-    enable  :sessions, :logging, :dump_errors
-    disable :run, :reload, :show_exceptions
-    # set :redis, Redis.new(:db => 2)
-  else
-    enable  :sessions, :logging, :dump_errors, :show_exceptions
-    disable :run, :reload
-    # set :redis, Redis.new(:db => 15)
-  end
-
-end
+# Main initializer to load required libraries
+require_relative 'configs/initializer'
 
 # App Router
 app = Rack::Builder.new do
-
-  map("/")     {run MainController.new }
-  map("/docs") {run DocsController.new }
 
   # CMS
   # map "/cms" do
   #   map("/")   {run CmsController.new }
   # end
+
+  map("/docs") {run DocsController.new }
+  map("/")     {run MainController.new }
   
 end
 

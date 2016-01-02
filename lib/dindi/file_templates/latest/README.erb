@@ -1,0 +1,19 @@
+<%= options.project_name.gsub(/(?:^|_)(.)/) { $1.upcase } %>
+<%= options.project_name.gsub(/(?:^|_)(.)/) { $1.upcase }.size.times { print "=" } %>
+
+## Install Required Gems
+
+In the project root directory run:
+$ bundle install --path vendor/bundle
+
+## Running Thin
+
+In the project root directory run:
+$ bundle exec thin start -a 0.0.0.0 -p 3000 -r config.ru -e production
+
+## Debugging code in IRB
+
+In the project root directory run:
+$ bundle exec irb
+irb> require_relative 'config/initializer'
+

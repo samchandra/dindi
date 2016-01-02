@@ -45,11 +45,14 @@ module Dindi
       project_absolute_dir = options.project_absolute_dir
 
       # copy location for not common template files
-      special_location_hash = {"debug_on.rb"        => File.join(project_absolute_dir, 'helpers', 'debug_on.rb'),
-                               "deploy_setting.rb"  => File.join(project_absolute_dir, 'configs', 'deploy_setting.rb'),
-                               "docs.haml"          => File.join(project_absolute_dir, 'views', 'docs.haml'), 
-                               "docs_controller.rb" => File.join(project_absolute_dir, 'routes', 'docs_controller.rb'), 
-                               "main_controller.rb" => File.join(project_absolute_dir, 'routes', 'main_controller.rb')
+      special_location_hash = {"debug_on.rb"              => File.join(project_absolute_dir, 'helpers', 'debug_on.rb'),
+                               "deploy_setting.rb"        => File.join(project_absolute_dir, 'configs', 'deploy_setting.rb'),
+                               "database.yml"             => File.join(project_absolute_dir, 'configs', 'database.yml'),
+                               "active_record_setting.rb" => File.join(project_absolute_dir, 'configs', 'active_record_setting.rb'),
+                               "initializer.rb"           => File.join(project_absolute_dir, 'configs', 'initializer.rb'),
+                               "docs.haml"                => File.join(project_absolute_dir, 'views', 'docs.haml'), 
+                               "docs_controller.rb"       => File.join(project_absolute_dir, 'routes', 'docs_controller.rb'), 
+                               "main_controller.rb"       => File.join(project_absolute_dir, 'routes', 'main_controller.rb')
                               }
 
       if special_location_hash[filename]
